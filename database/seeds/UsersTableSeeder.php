@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         ]);
         for($i=0;$i<5;$i++){
             DB::table('users')->insert([
-                'name' => Str::random(10),
+                'name' => "User_".Str::random(4),
                 'email' => Str::random(10).'@gmail.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('secret'),

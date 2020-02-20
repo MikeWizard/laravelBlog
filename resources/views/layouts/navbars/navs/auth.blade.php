@@ -13,6 +13,11 @@
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
         <li class="nav-item">
+          <a class="nav-link" href="{{ route('user.showEntries',Auth::id()) }}">
+            My entries
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{{ route('entry.create') }}">
             Create new entry
           </a>

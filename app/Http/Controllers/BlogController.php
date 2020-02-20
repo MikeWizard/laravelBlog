@@ -16,7 +16,7 @@ class BlogController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        
     }
 
     /**
@@ -26,19 +26,45 @@ class BlogController extends Controller
      */
     public function index()
     {
-        // $users=User::with(['entries' => function ($query) {
-        //     $query->orderBy('creation');
-        // }])->get();
         $users=User::with(['entries' => function ($query) {
-                 $query->orderBy('creation');
-             }])
-        ->get()
+            $query->orderBy('creation');
+        }])
+        ->paginate(2)
+        ;
+        $usersTransformed= collect($users->items())
         ->map(function( $user ){
             $user->entries = $user->entries->take(3);
             return $user;
         });
-        // dd($users);
-        return view('dashboard',['users'=>$users]);
+        $users= new \Illuminate\Pagination\LengthAwarePaginator(
+            $usersTransformed,
+            $users->total(),
+            $users->perPage(),
+            $users->currentPage(), [
+                'path' => \Request::url(),
+                'query' => [
+                    'page' => $users->currentPage()
+                ]
+            ]
+        );
+        if(\Auth::check()){
+                return view('entries.home.auth',['users'=>$users]);
+        }else{
+            return view('entries.home.guest',['users'=>$users]);
+        }
+    }
+    
+    /**
+     * Show user's entries
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showUserEntries($id=null)
+    {
+        if($id==null) $id=auth()->id();
+        $entries=Entry::orderBy('creation')->where("user_id",$id)->paginate(5);
+        // dd($entries);
+        return view('entries.showForUser', ['entries' => $entries]);
     }
     /**
      * Show the form for creating a new user

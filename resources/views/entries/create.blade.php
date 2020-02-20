@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <form method="post" action="{{ route('entry.store') }}" autocomplete="off" class="form-horizontal">
+          <form method="post" action="{{ route('entry.store') }}" autocomplete="off" class="form-horizontal" id="entryForm">
             @csrf
             @method('post')
 
@@ -43,7 +43,7 @@
                   </div>
                 </div>
               <div class="card-footer ml-auto mr-auto">
-                <button type="submit" class="btn btn-primary">{{ __('Add Entry') }}</button>
+                <button id="save" type="submit" class="btn btn-primary">{{ __('Add Entry') }}</button>
               </div>
             </div>
           </form>
@@ -52,3 +52,7 @@
     </div>
   </div>
 @endsection
+
+@push('js')
+<script src="{{ asset('js/entries/create.js') }}"></script>
+@endpush

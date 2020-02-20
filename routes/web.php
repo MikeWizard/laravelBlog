@@ -17,7 +17,7 @@ Route::get('/callback', 'SocialAuthTwitterController@callback');
 Route::get('/','BlogController@index')->name('index');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+Route::get('/home', 'BlogController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('table-list', function () {
@@ -48,8 +48,10 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.upgrade');
 	})->name('upgrade');
 
-	Route::resource('entry', 'BlogController', ['except' => ['show']]);
+	Route::resource('entry', 'BlogController');
 	Route::put('entry/{id}/edit', 'BlogController@update' );//It doesnt work without it
+	Route::post('entry/create', 'BlogController@store' );//It doesnt work without it
+	Route::get('user/{id}/showEntries', 'BlogController@showUserEntries')->name('user.showEntries');//It doesnt work without it	
 
 });
 
